@@ -130,7 +130,7 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange, f
             <SortSelect value={sort} onChange={(value) => updateFilter("sort", value)} />
             <button type="button" className="button button--ghost" onClick={resetFilters}>
               <ResetIcon />
-              Réinitialiser
+              <span className="button__label">Réinitialiser</span>
             </button>
           </div>
 

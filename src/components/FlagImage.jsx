@@ -1,10 +1,11 @@
 import { useState } from "react";
 
-// Shows a flag, or a tidy placeholder when the URL is missing or the image fails to load
-function FlagImage({ src, name, code, className = "", loading = "lazy" }) {
-  const [failedSrc, setFailedSrc] = useState(null);
+// Tries each flag URL in order; if all of them fail, shows a tidy placeholder
+function FlagImage({ sources, name, code, loading = "lazy" }) {
+  const [failedSources, setFailedSources] = useState([]);
+  const src = sources.find((url) => url && !failedSources.includes(url));
 
-  if (!src || failedSrc === src) {
+  if (!src) {
     return (
       <div className="flag-fallback" role="img" aria-label={`Drapeau indisponible : ${name}`}>
         <span className="flag-fallback__code">{code || "?"}</span>
@@ -15,14 +16,14 @@ function FlagImage({ src, name, code, className = "", loading = "lazy" }) {
 
   return (
     <img
-      className={`flag-frame__img ${className}`}
+      className="flag-frame__img"
       src={src}
       alt={`Drapeau : ${name}`}
       width="320"
       height="213"
       loading={loading}
       decoding="async"
-      onError={() => setFailedSrc(src)}
+      onError={() => setFailedSources((current) => [...current, src])}
     />
   );
 }

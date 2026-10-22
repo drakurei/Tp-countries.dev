@@ -11,7 +11,7 @@ function CountryCard({ country, index, isFavorite, onToggleFavorite }) {
     <article className="country-card" style={{ "--stagger": Math.min(index, 11) }}>
       <Link to={`/country/${country.code}`} className="country-card__link">
         <div className="flag-frame">
-          <FlagImage src={country.flagPng} name={country.name} code={country.code} />
+          <FlagImage sources={[country.flagPng, country.flagSvg]} name={country.name} code={country.code} />
         </div>
 
         <div className="country-card__body">
