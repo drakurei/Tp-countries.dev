@@ -1,7 +1,12 @@
-import { Link, NavLink } from "react-router";
+import { Link, useLocation } from "react-router";
 import { AtlasMark } from "./Icons.jsx";
 
-function Header() {
+function Header({ favoritesCount, onlyFavorites, onShowFavorites }) {
+  const { pathname } = useLocation();
+  const onHome = pathname === "/";
+  const exploreActive = onHome && !onlyFavorites;
+  const favoritesActive = onHome && onlyFavorites;
+
   return (
     <header className="site-header">
       <div className="container site-header__inner">
@@ -16,9 +21,30 @@ function Header() {
         <nav aria-label="Navigation principale">
           <ul className="nav">
             <li>
-              <NavLink to="/" end className={({ isActive }) => `nav__link${isActive ? " is-active" : ""}`}>
+              <Link
+                to="/"
+                state={{ scrollToExplorer: true }}
+                className={`nav__link${exploreActive ? " is-active" : ""}`}
+                aria-current={exploreActive ? "page" : undefined}
+                onClick={() => onShowFavorites(false)}
+              >
                 Explorer
-              </NavLink>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/"
+                state={{ scrollToExplorer: true }}
+                className={`nav__link${favoritesActive ? " is-active" : ""}`}
+                aria-current={favoritesActive ? "page" : undefined}
+                onClick={() => onShowFavorites(true)}
+              >
+                Favoris
+                <span className="nav__badge">
+                  {favoritesCount}
+                  <span className="visually-hidden"> pays</span>
+                </span>
+              </Link>
             </li>
           </ul>
         </nav>

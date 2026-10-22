@@ -131,16 +131,33 @@ export function getRegions(countries) {
     .sort((a, b) => a.label.localeCompare(b.label, "fr"));
 }
 
-export const DEFAULT_FILTERS = { query: "", region: "" };
+export const DEFAULT_FILTERS = { query: "", region: "", sort: "name", onlyFavorites: false };
 
-export function filterCountries(countries, { query = "", region = "" }) {
+export const SORT_OPTIONS = [
+  { value: "name", label: "Nom, de A à Z" },
+  { value: "population", label: "Population, décroissante" },
+];
+
+export function filterCountries(countries, { query = "", region = "", onlyFavorites = false }, favorites = []) {
   const search = normalizeText(query);
 
   return countries.filter((country) => {
     const matchesRegion = !region || country.region === region;
     const matchesSearch = !search || country.searchText.includes(search);
-    return matchesRegion && matchesSearch;
+    const matchesFavorites = !onlyFavorites || favorites.includes(country.code);
+    return matchesRegion && matchesSearch && matchesFavorites;
   });
+}
+
+export function sortCountries(countries, sort) {
+  // Copy first: sort() modifies the array it is called on
+  const sorted = [...countries];
+
+  if (sort === "population") {
+    // Countries without a known population go to the end
+    return sorted.sort((a, b) => (b.population ?? -1) - (a.population ?? -1));
+  }
+  return sorted.sort((a, b) => a.name.localeCompare(b.name, "fr"));
 }
 
 const numberFormat = new Intl.NumberFormat("fr-FR");

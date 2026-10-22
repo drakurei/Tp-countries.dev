@@ -12,8 +12,7 @@ function useCountries() {
 
     getAllCountries(controller.signal)
       .then((data) => {
-        // The API sorts by English name; we display French names, so sort again
-        setCountries(data.sort((a, b) => a.name.localeCompare(b.name, "fr")));
+        setCountries(data);
         setStatus("success");
       })
       .catch((error) => {
