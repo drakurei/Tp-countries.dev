@@ -2,7 +2,7 @@
 
 Atlas est une petite application React qui permet d'explorer les pays du monde. Je l'ai réalisée dans le cadre d'un TP de mon cours de React.
 
-Site en ligne : https://drakurei.github.io/Tp-countries.dev/ *(disponible une fois GitHub Pages activé sur le dépôt)*
+Site en ligne : https://drakurei.github.io/Tp-countries.dev/
 
 ## Le sujet du TP
 
