@@ -44,6 +44,7 @@ const SUBREGION_LABELS = {
 
 const languageNames = new Intl.DisplayNames(["fr"], { type: "language" });
 const currencyNames = new Intl.DisplayNames(["fr"], { type: "currency" });
+const countryNames = new Intl.DisplayNames(["fr"], { type: "region" });
 
 function isImageUrl(value) {
   return typeof value === "string" && /^https?:\/\//.test(value);
@@ -73,7 +74,14 @@ function translate(displayNames, code, fallback) {
 export function normalizeCountry(raw) {
   // Depending on the endpoint, `name` can be a string or an object { common, official }
   const englishName = typeof raw.name === "string" ? raw.name : (raw.name?.common ?? null);
-  const name = raw.translations?.fr || englishName || "Pays sans nom";
+  // French name: /countries provides translations, /alpha does not, so the browser
+  // can translate the 2-letter ISO code instead (it returns the code itself if unknown)
+  const frenchFromCode = translate(countryNames, raw.alpha2Code, null);
+  const name =
+    raw.translations?.fr ||
+    (frenchFromCode && frenchFromCode !== raw.alpha2Code ? frenchFromCode : null) ||
+    englishName ||
+    "Pays sans nom";
   const nativeName = typeof raw.nativeName === "string" ? raw.nativeName : null;
 
   // `flag` is usually an emoji, so it is only used when it really is an image URL

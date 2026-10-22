@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 import Hero from "../components/Hero.jsx";
 import SearchBar from "../components/SearchBar.jsx";
 import RegionFilter from "../components/RegionFilter.jsx";
@@ -9,6 +11,14 @@ import { DEFAULT_FILTERS, filterCountries, getRegionLabel, getRegions } from "..
 
 function CountriesPage({ countries, status, onRetry, filters, onFiltersChange }) {
   const { query, region } = filters;
+  const location = useLocation();
+
+  // Coming back from a detail page: jump straight to the grid instead of the hero
+  useEffect(() => {
+    if (location.state?.scrollToExplorer) {
+      document.getElementById("explorer")?.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  }, [location.state]);
 
   const regions = getRegions(countries);
   const visibleCountries = filterCountries(countries, filters);
