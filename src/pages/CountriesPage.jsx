@@ -2,15 +2,22 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import Hero from "../components/Hero.jsx";
 import SearchBar from "../components/SearchBar.jsx";
+import SortSelect from "../components/SortSelect.jsx";
 import RegionFilter from "../components/RegionFilter.jsx";
 import CountryCard from "../components/CountryCard.jsx";
 import LoadingState from "../components/LoadingState.jsx";
 import StatePanel from "../components/StatePanel.jsx";
-import { ResetIcon } from "../components/Icons.jsx";
-import { DEFAULT_FILTERS, filterCountries, getRegionLabel, getRegions } from "../utils/countryUtils.js";
+import { ResetIcon, StarIcon } from "../components/Icons.jsx";
+import {
+  DEFAULT_FILTERS,
+  filterCountries,
+  getRegionLabel,
+  getRegions,
+  sortCountries,
+} from "../utils/countryUtils.js";
 
-function CountriesPage({ countries, status, onRetry, filters, onFiltersChange }) {
-  const { query, region } = filters;
+function CountriesPage({ countries, status, onRetry, filters, onFiltersChange, favorites, onToggleFavorite }) {
+  const { query, region, sort, onlyFavorites } = filters;
   const location = useLocation();
 
   // Coming back from a detail page: jump straight to the grid instead of the hero
@@ -20,8 +27,9 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange })
     }
   }, [location.state]);
 
+  // Derived data: recomputed on each render from the state, never stored separately
   const regions = getRegions(countries);
-  const visibleCountries = filterCountries(countries, filters);
+  const visibleCountries = sortCountries(filterCountries(countries, filters, favorites), sort);
 
   function updateFilter(name, value) {
     onFiltersChange((previous) => ({ ...previous, [name]: value }));
@@ -31,7 +39,10 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange })
     onFiltersChange(DEFAULT_FILTERS);
   }
 
-  const title = region ? getRegionLabel(region) : "Tous les pays";
+  let title = region ? getRegionLabel(region) : "Tous les pays";
+  if (onlyFavorites) {
+    title = region ? `Mes favoris, ${getRegionLabel(region)}` : "Mes favoris";
+  }
 
   let content;
   if (status === "loading") {
@@ -49,6 +60,19 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange })
       >
         L'API countries.dev ne répond pas pour le moment. Vérifiez votre connexion internet, puis relancez le
         chargement.
+      </StatePanel>
+    );
+  } else if (onlyFavorites && favorites.length === 0) {
+    content = (
+      <StatePanel
+        title="Aucun favori pour l'instant"
+        action={
+          <button type="button" className="button button--ghost" onClick={resetFilters}>
+            Afficher tous les pays
+          </button>
+        }
+      >
+        Touchez l'étoile d'une carte pour garder un pays ici. Vos favoris restent enregistrés dans ce navigateur.
       </StatePanel>
     );
   } else if (visibleCountries.length === 0) {
@@ -71,7 +95,12 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange })
       <ul className="country-grid">
         {visibleCountries.map((country, index) => (
           <li key={country.code}>
-            <CountryCard country={country} index={index} />
+            <CountryCard
+              country={country}
+              index={index}
+              isFavorite={favorites.includes(country.code)}
+              onToggleFavorite={onToggleFavorite}
+            />
           </li>
         ))}
       </ul>
@@ -98,17 +127,32 @@ function CountriesPage({ countries, status, onRetry, filters, onFiltersChange })
         <div className="toolbar">
           <div className="toolbar__row">
             <SearchBar value={query} onChange={(value) => updateFilter("query", value)} />
+            <SortSelect value={sort} onChange={(value) => updateFilter("sort", value)} />
             <button type="button" className="button button--ghost" onClick={resetFilters}>
               <ResetIcon />
               Réinitialiser
             </button>
           </div>
-          <RegionFilter
-            regions={regions}
-            value={region}
-            total={countries.length}
-            onChange={(value) => updateFilter("region", value)}
-          />
+
+          <div className="toolbar__filters">
+            <button
+              type="button"
+              className="chip chip--favorites"
+              aria-pressed={onlyFavorites}
+              onClick={() => updateFilter("onlyFavorites", !onlyFavorites)}
+            >
+              <StarIcon className="chip__icon" filled={onlyFavorites} />
+              Favoris
+              <span className="chip__count">{favorites.length}</span>
+            </button>
+            <span className="toolbar__divider" aria-hidden="true" />
+            <RegionFilter
+              regions={regions}
+              value={region}
+              total={countries.length}
+              onChange={(value) => updateFilter("region", value)}
+            />
+          </div>
         </div>
 
         {content}

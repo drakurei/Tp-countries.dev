@@ -1,8 +1,9 @@
 import { Link } from "react-router";
 import FlagImage from "./FlagImage.jsx";
+import FavoriteButton from "./FavoriteButton.jsx";
 import { formatCompact, getRegionLabel } from "../utils/countryUtils.js";
 
-function CountryCard({ country, index }) {
+function CountryCard({ country, index, isFavorite, onToggleFavorite }) {
   const population = formatCompact(country.population);
 
   return (
@@ -29,6 +30,13 @@ function CountryCard({ country, index }) {
           </dl>
         </div>
       </Link>
+
+      {/* Outside the link: a button cannot be nested inside a link */}
+      <FavoriteButton
+        name={country.name}
+        isFavorite={isFavorite}
+        onToggle={() => onToggleFavorite(country.code)}
+      />
     </article>
   );
 }

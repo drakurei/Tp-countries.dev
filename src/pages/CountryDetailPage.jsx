@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import FlagImage from "../components/FlagImage.jsx";
 import StatePanel from "../components/StatePanel.jsx";
+import FavoriteButton from "../components/FavoriteButton.jsx";
 import { ArrowLeftIcon } from "../components/Icons.jsx";
 import { getCountryByCode } from "../services/countriesApi.js";
 import { formatNumber, getRegionLabel } from "../utils/countryUtils.js";
@@ -34,7 +35,7 @@ function Fact({ label, value }) {
   );
 }
 
-function CountryDetailPage({ countries }) {
+function CountryDetailPage({ countries, favorites, onToggleFavorite }) {
   const { code } = useParams();
   // `result` remembers which code it belongs to: if it does not match the URL, we are loading
   const [result, setResult] = useState(null);
@@ -150,6 +151,14 @@ function CountryDetailPage({ countries }) {
               {country.name}
             </h1>
             {otherNames.length > 0 && <p className="detail-hero__names">{otherNames.join(". ")}.</p>}
+            <div className="detail-hero__actions">
+              <FavoriteButton
+                name={country.name}
+                isFavorite={favorites.includes(country.code)}
+                onToggle={() => onToggleFavorite(country.code)}
+                withLabel
+              />
+            </div>
           </div>
         </header>
 
