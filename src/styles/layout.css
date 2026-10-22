@@ -1,0 +1,294 @@
+/* ---------- Header ---------- */
+.site-header {
+  position: relative;
+  z-index: 20;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 72px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.brand__mark {
+  width: 34px;
+  height: 34px;
+  color: var(--color-gold);
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+.brand__tagline {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition:
+    color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
+}
+
+.nav__link.is-active {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav__badge {
+  min-width: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-bronze);
+  color: var(--color-bg);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover {
+    color: var(--color-text);
+  }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: var(--space-7);
+  padding-block: var(--space-8) var(--space-7);
+}
+
+.hero__title {
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.hero__lead {
+  max-width: 46ch;
+  margin-top: var(--space-5);
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.hero__note {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.hero__visual {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 440px);
+}
+
+/* Staggered entrance: title, text, actions, then the globe */
+.hero__title,
+.hero__lead,
+.hero__actions,
+.hero__visual {
+  animation: rise-in var(--duration-slow) var(--ease-out) both;
+}
+
+.hero__lead {
+  animation-delay: 90ms;
+}
+
+.hero__actions {
+  animation-delay: 180ms;
+}
+
+.hero__visual {
+  animation-name: fade-in;
+  animation-duration: 1400ms;
+  animation-delay: 120ms;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Globe illustration ---------- */
+.globe {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.globe__meridian {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  animation: meridian-turn 28s ease-in-out infinite;
+}
+
+/* Each meridian starts at a different longitude (30° apart) */
+.globe__meridian:nth-child(2) { animation-delay: -2.333s; }
+.globe__meridian:nth-child(3) { animation-delay: -4.667s; }
+.globe__meridian:nth-child(4) { animation-delay: -7s; }
+.globe__meridian:nth-child(5) { animation-delay: -9.333s; }
+.globe__meridian:nth-child(6) { animation-delay: -11.667s; }
+
+@keyframes meridian-turn {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+}
+
+.globe__orbit {
+  stroke-dasharray: 2 7;
+  animation: orbit-flow 40s linear infinite;
+}
+
+@keyframes orbit-flow {
+  to {
+    stroke-dashoffset: -540;
+  }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  position: relative;
+  margin-top: var(--space-9);
+  border-top: 1px solid var(--color-border);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+  padding-block: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.site-footer__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-text);
+}
+
+.site-footer a {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 184, 160, 0.4);
+  text-underline-offset: 3px;
+}
+
+/* ---------- Page transition ---------- */
+.page {
+  animation: page-in 450ms var(--ease-out) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .hero__visual {
+    grid-row: 1;
+    width: min(62%, 280px);
+  }
+}
+
+@media (max-width: 480px) {
+  .brand__tagline {
+    display: none;
+  }
+
+  .nav__link {
+    padding: 0 var(--space-3);
+  }
+
+  .hero__lead {
+    font-size: var(--text-base);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Freeze the globe on a natural-looking frame instead of stopping it at 0 */
+  .globe__meridian,
+  .globe__orbit {
+    animation-duration: 28s !important;
+    animation-iteration-count: infinite !important;
+    animation-play-state: paused;
+  }
+}

@@ -1,0 +1,56 @@
+:root {
+  /* Colors */
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-raised: #1c1b1a;
+  --color-bronze: #a78b71;
+  --color-gold: #c9b8a0;
+  --color-light: #e8d5b7;
+  --color-text: #f5f2ec;
+  --color-text-muted: #9b968f;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-bronze-soft: rgba(167, 139, 113, 0.14);
+  --color-error: #e7a596;
+
+  /* Typography */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.875rem;
+  --text-hero: clamp(2.75rem, 1.6rem + 4.6vw, 5.25rem);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Shapes */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+  --shadow-card: 0 24px 48px -28px rgba(0, 0, 0, 0.9);
+  --shadow-flag: 0 10px 24px rgba(0, 0, 0, 0.45);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-base: 280ms;
+  --duration-slow: 800ms;
+
+  /* Layout */
+  --content-width: 1200px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+}
