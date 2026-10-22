@@ -11,7 +11,7 @@ function SearchBar({ value, onChange }) {
         id="country-search"
         className="search__input"
         type="search"
-        placeholder="Rechercher un pays, par exemple Japon"
+        placeholder="Rechercher un pays"
         autoComplete="off"
         spellCheck="false"
         value={value}

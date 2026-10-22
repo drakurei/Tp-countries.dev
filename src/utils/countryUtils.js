@@ -63,9 +63,13 @@ export function normalizeText(text) {
     .trim();
 }
 
+// Uses the browser's built-in translations (Intl.DisplayNames).
+// When it does not know a code, it returns the code itself: we keep the API name instead.
 function translate(displayNames, code, fallback) {
   try {
-    return code ? capitalize(displayNames.of(code)) : fallback;
+    const translated = code ? displayNames.of(code) : null;
+    if (!translated || translated.toLowerCase() === code.toLowerCase()) return fallback;
+    return capitalize(translated);
   } catch {
     return fallback;
   }
@@ -74,14 +78,10 @@ function translate(displayNames, code, fallback) {
 export function normalizeCountry(raw) {
   // Depending on the endpoint, `name` can be a string or an object { common, official }
   const englishName = typeof raw.name === "string" ? raw.name : (raw.name?.common ?? null);
-  // French name: /countries provides translations, /alpha does not, so the browser
-  // can translate the 2-letter ISO code instead (it returns the code itself if unknown)
-  const frenchFromCode = translate(countryNames, raw.alpha2Code, null);
+  // French name: /countries provides translations, /alpha does not,
+  // so in that case the browser translates the 2-letter ISO code
   const name =
-    raw.translations?.fr ||
-    (frenchFromCode && frenchFromCode !== raw.alpha2Code ? frenchFromCode : null) ||
-    englishName ||
-    "Pays sans nom";
+    raw.translations?.fr || translate(countryNames, raw.alpha2Code, null) || englishName || "Pays sans nom";
   const nativeName = typeof raw.nativeName === "string" ? raw.nativeName : null;
 
   // `flag` is usually an emoji, so it is only used when it really is an image URL

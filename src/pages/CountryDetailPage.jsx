@@ -139,7 +139,7 @@ function CountryDetailPage({ countries, favorites, onToggleFavorite }) {
       <article aria-labelledby="country-name">
         <header className="detail-hero">
           <div className="flag-frame flag-frame--large">
-            <FlagImage src={country.flagSvg} name={country.name} code={country.code} loading="eager" />
+            <FlagImage sources={[country.flagSvg, country.flagPng]} name={country.name} code={country.code} loading="eager" />
           </div>
 
           <div className="detail-hero__text">
